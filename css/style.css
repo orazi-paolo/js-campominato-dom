@@ -70,3 +70,7 @@ footer{
     justify-content: center;
     align-items: center;
 }
+
+.bomb{
+    background-color: red;
+}
