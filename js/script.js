@@ -9,6 +9,22 @@ let score = 0;
 
 // Funzioni
 
+// Funzione per generare 16 numeri casuali tutti diversi compresi tra 1 e il totale delle celle
+function casualNumberBomb(totalCells){
+    // creo un array per inserire la lista dei numeri
+    let randomNumbers = [];
+    // fino a che la lunghezza dell array è inferiore a 16...
+        while (randomNumbers.length < 16) {
+            // genero numero casuale
+        let randomNumber = Math.floor(Math.random() * totalCells) + 1;
+        // se il numero non è presente nella lista lo inserisco
+        if (!randomNumbers.includes(randomNumber)) {
+            randomNumbers.push(randomNumber);
+        }
+    }
+    return randomNumbers;
+}
+console.log(casualNumberBomb(100));
 // Funzione per creare una singola cella
 function generatedCell(number, classCell) {
     const cell = document.createElement('div');
