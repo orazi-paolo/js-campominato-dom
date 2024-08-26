@@ -1,0 +1,73 @@
+body{
+    background-color: aquamarine;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+header{
+    height: 100px;
+    background-color: white;
+}
+img{
+    height: 50px;
+}
+select{
+    width: 150px;
+}
+
+button{
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+footer{
+    height: 80px;
+    background-color: white;
+}
+
+#play{
+    border-radius: 10px;
+}
+/* utils */
+.cell-easy{
+    height: calc(100% / 10);
+    flex-basis: calc(100% / 10);
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.cell-medium{
+    height: calc(100% / 9);
+    flex-basis: calc(100% / 9);
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.cell-hard{
+    height: calc(100% / 7);
+    flex-basis: calc(100% / 7);
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+}
+.bg-blue{
+    background-color: blue;
+}
+.color-white{
+    color: white;
+}
+/* /////////////////////// */
+.grid{
+    height: calc(100vh - 180px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
