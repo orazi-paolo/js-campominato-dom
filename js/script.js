@@ -2,7 +2,11 @@
 const buttonPlay = document.getElementById('play');
 const grid = document.getElementById('grid');
 const selectField = document.getElementById('difficulty');
+const scoreField = document.getElementById('score');
 // /////////////////////////////////////////////////////////////////////////
+// Preparo una variabile per tenere il punteggio dell utente
+let score = 0;
+
 // Funzioni
 
 // Funzione per creare una singola cella
@@ -10,10 +14,15 @@ function generatedCell(number, classCell) {
     const cell = document.createElement('div');
     cell.classList.add(classCell);
     cell.textContent = number;
+    // Quando clicco su una cella...
     cell.addEventListener('click', function() {
         console.log(this.textContent);
-        this.classList.toggle('bg-blue');
-        this.classList.toggle('color-white');
+        // Se la cella non ha la classe selected allora aggiungi il punto su score 
+        if(!cell.classList.contains('selected')){
+            score++;
+            scoreField.innerHTML = score;
+        }
+        this.classList.add('selected');
     });
     return cell;
 }
@@ -22,8 +31,8 @@ function generatedCell(number, classCell) {
 function generatedGrid(numberCell, classCell) {
     grid.innerHTML = ''; // Pulisci la griglia
     for (let i = 1; i <= numberCell; i++) {
-        const cella = generatedCell(i, classCell);
-        grid.appendChild(cella);
+        const cell = generatedCell(i, classCell);
+        grid.appendChild(cell);
     }
 }
 // /////////////////////////////////////////////////////////////////////////

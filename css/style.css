@@ -57,11 +57,10 @@ footer{
     cursor: pointer;
 
 }
-.bg-blue{
+.selected{
     background-color: blue;
-}
-.color-white{
     color: white;
+    cursor: not-allowed;
 }
 /* /////////////////////// */
 .grid{
