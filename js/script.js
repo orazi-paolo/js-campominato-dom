@@ -3,24 +3,25 @@ const buttonPlay = document.getElementById('play');
 const grid = document.getElementById('grid');
 const selectField = document.getElementById('difficulty');
 const scoreField = document.getElementById('score');
+const win = document.getElementById('winorlose');
 
 // Preparo una variabile per tenere il punteggio dell'utente
 let score = 0;
 
+// Preparo una variabile per tenere il numero totale di celle
+let numberCell = 0;
+
 // Preparo la lista delle posizioni delle bombe
 let randomNumbersBomb = [];
 
+// Creo un flag per capire se il gioco è finito
+let gameOver = false;
+
 // Funzione per generare 16 numeri casuali tutti diversi compresi tra 1 e il totale delle celle
 function casualNumberBomb(totalCells) {
-    // resetto l'array
-    randomNumbersBomb = [];
-
-    // fino a che la lunghezza dell'array è inferiore a 16...
+    randomNumbersBomb = []; // Resetto l'array
     while (randomNumbersBomb.length < 16) {
-        // genero numero casuale
         let randomNumber = Math.floor(Math.random() * totalCells) + 1;
-
-        // se il numero non è presente nella lista lo inserisco
         if (!randomNumbersBomb.includes(randomNumber)) {
             randomNumbersBomb.push(randomNumber);
         }
@@ -34,26 +35,31 @@ function generatedCell(number, classCell) {
     cell.classList.add(classCell);
     cell.textContent = number;
 
-    // Quando clicco su una cella...
     cell.addEventListener('click', function () {
-        console.log(this.textContent);
+        // Blocco il click se il gioco è finito oppure la cella è gia selezionata
+        if (gameOver || this.classList.contains('selected')) return; 
 
-        // converto la stringa della cella in un numero
         const cellNumber = parseInt(this.textContent);
 
-        // controllo se il numero della cella cliccata è presente nell'array
         if (randomNumbersBomb.includes(cellNumber)) {
             cell.classList.add('bomb');
-            console.log(`Hai trovato una bomba! Hai perso! Il tuo punteggio è di ${score}`);
-        } else if (!cell.classList.contains('selected')) {
-            // Se la cella non ha la classe selected aggiungo il punto su score
+            win.innerText = `Hai trovato una bomba! Hai perso! Il tuo punteggio finale è ${score}`;
+            // cambio il flag dicendo che il gioco è finito
+            gameOver = true;
+            // Mostro tutte le bombe 
+            revealBombs(); 
+        } else {
             score++;
             scoreField.innerHTML = score;
             this.classList.add('selected');
 
-            // Verifica condizione di vittoria
-            if (score === (cellNumber - randomNumbersBomb.length)) {
-                console.log(`HAI VINTO! Il tuo punteggio è di ${score}`);
+            // Verifico qual ora l utente ha vinto
+            if (score === (numberCell - randomNumbersBomb.length)) {
+                win.innerText = `HAI VINTO! Il tuo punteggio finale è ${score}`;
+                // cambio il flag dicendo che il gioco è finito
+                gameOver = true;
+                // Mostro tutte le bombe  
+                revealBombs(); 
             }
         }
     });
@@ -61,20 +67,46 @@ function generatedCell(number, classCell) {
     return cell;
 }
 
+// Funzione per mostrare tutte le bombe
+function revealBombs() {
+    // Seleziono tutte le celle della griglia
+    const cells = grid.getElementsByTagName('div'); 
+
+    for (let i = 0; i < cells.length; i++) {
+        const cell = cells[i];
+        const cellNumber = parseInt(cell.textContent);
+        if (randomNumbersBomb.includes(cellNumber)) {
+            cell.classList.add('bomb');
+        }
+    }
+
+    // Disabilito tutti i click togliendo l'event listener
+    for (let i = 0; i < cells.length; i++) {
+        const cell = cells[i];
+        // Rimuovo l'event listener
+        cell.removeEventListener('click', cell.onclick); 
+    }
+}
+
 // Funzione per generare la griglia
-function generatedGrid(numberCell, classCell) {
-    // tolgo tutto dalla griglia per resettarla
-    grid.innerHTML = '';
-
+function generatedGrid(totalCells, classCell) {
+    // pulisco la griglia
+    grid.innerHTML = ''; 
     // resetto il punteggio
-    score = 0;
+    score = 0; 
     scoreField.innerHTML = score;
-
-    // genero i numeri delle bombe
-    casualNumberBomb(numberCell);
+    // Resetto il messaggio di vittoria o sconfitta
+    win.innerText = ''; 
+    // Imposto il numero totale delle celle
+    numberCell = totalCells; 
+    // Genero le posizioni delle bombe
+    casualNumberBomb(totalCells); 
     console.log(randomNumbersBomb);
 
-    for (let i = 1; i <= numberCell; i++) {
+    // Reimposto il flag all originale
+    gameOver = false;
+
+    for (let i = 1; i <= totalCells; i++) {
         const cell = generatedCell(i, classCell);
         grid.appendChild(cell);
     }
@@ -82,6 +114,7 @@ function generatedGrid(numberCell, classCell) {
 
 // Quando clicco su play genero la griglia con le celle
 buttonPlay.addEventListener('click', function () {
+    buttonPlay.innerText = 'Try Again'
     const difficulty = selectField.value;
     let numberCells;
     let classCell;
